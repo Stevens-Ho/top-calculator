@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+    font-size: larger;
+}
+
+.bigContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    height: 500px;
+    border: 1px solid black;
+}
+
+.answerDisplay {
+    border: 1px solid black;
+    width: 85%;
+    margin: 15px auto;
+    height: 12%;
+    padding-right: 10px;
+    text-align: end;
+    padding-top: 5px;
+}
+
+.container {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: auto;
+    width: 95%;
+    height: 75%;
+    border: 1px solid black;
+}
+
+.rowContainer {
+    justify-content: space-evenly;
+}
+
+.rowContainer>button {
+    width: 70px;
+    height: 70px;
+}
