@@ -1,3 +1,4 @@
+const answerDisplay = document.querySelector(".answerDisplay");
 function add(a, b) {
     return a + b;
 }
@@ -24,4 +25,18 @@ function operate(firstNumber, operator, secondNumber) {
     } else if (operator === "÷") {
         return divide(firstNumber, secondNumber);
     }
+}
+
+function pressNumberBtn() {
+    const numberBtn = document.querySelectorAll(".numberBtn");
+
+    numberBtn.forEach(number => {
+        number.addEventListener("click", function() {
+            answerDisplay.textContent += number.textContent;
+        });
+    });
+}
+
+function startCalculator() {
+    pressNumberBtn();
 }
