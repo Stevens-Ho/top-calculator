@@ -66,10 +66,30 @@ function pressEqualBtn() {
     });
 }
 
+function pressClearBtn() {
+    const clear = document.getElementById("clear");
+    clear.addEventListener("click", function() {
+        answerDisplay.textContent = "";
+    });
+}
+
+function pressDeleteBtn() {
+    const del = document.getElementById("del");
+    del.addEventListener("click", function() {
+        if (answerDisplay.textContent[answerDisplay.textContent.length - 1] === " ") {
+            answerDisplay.textContent = answerDisplay.textContent.slice(0, -3);
+        } else {
+            answerDisplay.textContent = answerDisplay.textContent.slice(0, -1);
+        }
+    });
+}
+
 function startCalculator() {
     pressNumberBtn();
     pressMathOperatorBtn();
     pressEqualBtn();
+    pressClearBtn();
+    pressDeleteBtn();
 }
 
 startCalculator();

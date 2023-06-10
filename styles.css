@@ -43,3 +43,7 @@
     width: 70px;
     height: 70px;
 }
+
+.rowContainer .rectangleBtn {
+    width: 150px;
+}
