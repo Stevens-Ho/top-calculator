@@ -31,7 +31,11 @@ function pressNumberBtn() {
     const numberBtn = document.querySelectorAll(".numberBtn");
     numberBtn.forEach(number => {
         number.addEventListener("click", function() {
-            answerDisplay.textContent += number.textContent;
+            let lastLetter = answerDisplay.textContent[answerDisplay.textContent.length - 1];
+            if (number.textContent !== "0" || 
+            (number.textContent === "0" && answerDisplay.textContent && lastLetter !== " ")) {
+                answerDisplay.textContent += number.textContent;
+            }
         });
     });
 }
