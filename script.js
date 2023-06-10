@@ -100,12 +100,23 @@ function pressDeleteBtn() {
     });
 }
 
+function pressDotBtn() {
+    const dot = document.getElementById("dot");
+    dot.addEventListener("click", () => {
+        const hasDot = /\./g;
+        if (!hasDot.test(answerDisplay.textContent) && answerDisplay.textContent) {
+            answerDisplay.textContent += dot.textContent;
+        }
+    });
+}
+
 function startCalculator() {
     pressNumberBtn();
     pressMathOperatorBtn();
     pressEqualBtn();
     pressClearBtn();
     pressDeleteBtn();
+    pressDotBtn();
 }
 
 startCalculator();
