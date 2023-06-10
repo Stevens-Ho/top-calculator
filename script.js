@@ -58,18 +58,20 @@ function pressMathOperatorBtn() {
 function pressEqualBtn() {
     const equalBtn = document.getElementById("equal");
     equalBtn.addEventListener("click", function() {
-        let split = answerDisplay.textContent.split(" ");
+        let split = answerDisplay.textContent.split(" ").filter(e => e);  
         let answer;
-        let iteration = split.length - 2;
-        for (let i = 0; i < iteration; i += 2) {
-            const firstNumber = +split[0+i];
-            const operator = split[1+i];
-            const secondNumber = +split[2+i];
-            if (i === 0) answer = firstNumber;
-            answer = operate(answer, operator, secondNumber);
-            
+        if (split.length > 2) {
+            let iteration = split.length - 2;
+            for (let i = 0; i < iteration; i += 2) {
+                const firstNumber = +split[0+i];
+                const operator = split[1+i];
+                const secondNumber = +split[2+i];
+                if (i === 0) answer = firstNumber;
+                answer = operate(answer, operator, secondNumber);
+            }
+            return answerDisplay.textContent = answer;
         }
-        answerDisplay.textContent = answer;
+        return answerDisplay.textContent;
     });
 }
 
