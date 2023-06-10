@@ -40,7 +40,11 @@ function pressMathOperatorBtn() {
     const mathOperatorBtn = document.querySelectorAll(".mathOperatorBtn");
     mathOperatorBtn.forEach(btn => {
         btn.addEventListener("click", function() {
-            if (answerDisplay.textContent) {
+            let lastLetter = answerDisplay.textContent[answerDisplay.textContent.length - 1];
+            if (lastLetter === " ") {
+                answerDisplay.textContent = answerDisplay.textContent.slice(0, -3);
+                answerDisplay.textContent += " " + btn.textContent + " ";
+            } else if (answerDisplay.textContent) {
                 answerDisplay.textContent += " " + btn.textContent + " ";
             }
         });
@@ -58,7 +62,6 @@ function pressEqualBtn() {
             const operator = split[1+i];
             const secondNumber = +split[2+i];
             if (i === 0) answer = firstNumber;
-            console.log(firstNumber + operator + secondNumber);
             answer = operate(answer, operator, secondNumber);
             
         }
