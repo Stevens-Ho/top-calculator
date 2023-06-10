@@ -44,35 +44,42 @@ function pressMathOperatorBtn() {
     const mathOperatorBtn = document.querySelectorAll(".mathOperatorBtn");
     mathOperatorBtn.forEach(btn => {
         btn.addEventListener("click", function() {
-            let lastLetter = answerDisplay.textContent[answerDisplay.textContent.length - 1];
-            if (lastLetter === " ") {
-                answerDisplay.textContent = answerDisplay.textContent.slice(0, -3);
-                answerDisplay.textContent += " " + btn.textContent + " ";
-            } else if (answerDisplay.textContent) {
-                answerDisplay.textContent += " " + btn.textContent + " ";
+            const mathOperator = " " + btn.textContent + " ";
+            const regexMathOperator = / [\+\-x÷] /g;
+            const regexMathOperatorLastLetter = / [\+\-x÷] $/g;
+            if (!regexMathOperator.test(answerDisplay.textContent) && answerDisplay.textContent) {
+                answerDisplay.textContent += mathOperator;
+            } else if (regexMathOperatorLastLetter.test(answerDisplay.textContent)) {
+                answerDisplay.textContent.replace(" + ", mathOperator);
+                answerDisplay.textContent = answerDisplay.textContent.replace(regexMathOperator, mathOperator);
+            }  else if (/ [\+\-x÷] /g.test(answerDisplay.textContent)) {
+                calculateSolution();
+                answerDisplay.textContent += mathOperator;
             }
         });
     });
 }
 
+function calculateSolution() {
+    let split = answerDisplay.textContent.split(" ").filter(e => e);  
+    let answer;
+    if (split.length > 2) {
+        let iteration = split.length - 2;
+        for (let i = 0; i < iteration; i += 2) {
+            const firstNumber = +split[0+i];
+            const operator = split[1+i];
+            const secondNumber = +split[2+i];
+            if (i === 0) answer = firstNumber;
+            answer = operate(answer, operator, secondNumber);
+        }
+        return answerDisplay.textContent = answer;
+    }
+    return answerDisplay.textContent;
+}
+
 function pressEqualBtn() {
     const equalBtn = document.getElementById("equal");
-    equalBtn.addEventListener("click", function() {
-        let split = answerDisplay.textContent.split(" ").filter(e => e);  
-        let answer;
-        if (split.length > 2) {
-            let iteration = split.length - 2;
-            for (let i = 0; i < iteration; i += 2) {
-                const firstNumber = +split[0+i];
-                const operator = split[1+i];
-                const secondNumber = +split[2+i];
-                if (i === 0) answer = firstNumber;
-                answer = operate(answer, operator, secondNumber);
-            }
-            return answerDisplay.textContent = answer;
-        }
-        return answerDisplay.textContent;
-    });
+    equalBtn.addEventListener("click", calculateSolution);
 }
 
 function pressClearBtn() {
