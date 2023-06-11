@@ -122,7 +122,11 @@ function pressDotBtn() {
     const dot = document.getElementById("dot");
     dot.addEventListener("click", () => {
         const hasDot = /\./g;
-        if (!hasDot.test(answerDisplay.textContent) && answerDisplay.textContent) {
+        const split = answerDisplay.textContent.split(" ").filter(e => e);  
+        const firstNumber = split[0];
+        const secondNumber = split[2];
+        if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber)) ||
+        (!/\./.test(secondNumber) && /\d+/.test(secondNumber))) {
             answerDisplay.textContent += dot.textContent;
         }
     });
