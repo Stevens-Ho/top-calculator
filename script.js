@@ -1,36 +1,39 @@
 const answerDisplay = document.querySelector(".answerDisplay");
-function add(a, b) {
-    return a + b;
-}
-
-function subtract(a, b) {
-    return a - b;
-}
-
-function multiply(a, b) {
-    return a * b;
-}
-
-function divide(a, b) {
-    return a / b;
-}
 
 function operate(firstNumber, operator, secondNumber) {
-    if (operator === "+") {
-        return add(firstNumber, secondNumber);
-    } else if (operator === "-") {
-        return subtract(firstNumber, secondNumber);
-    } else if (operator === "x") {
-        return multiply(firstNumber, secondNumber);
-    } else if (operator === "÷") {
-        return divide(firstNumber, secondNumber);
+    switch (operator) {
+        case "+":
+            return firstNumber + secondNumber;
+        case "-":
+            return firstNumber - secondNumber;
+        case "x":
+            return firstNumber * secondNumber;
+        case "÷":
+            return firstNumber / secondNumber;
     }
+}
+
+function calculateSolution() {
+    const split = answerDisplay.textContent.split(" ").filter(e => e);  
+    let answer;
+    if (split.length > 2) {
+        const iteration = split.length - 2;
+        for (let i = 0; i < iteration; i += 2) {
+            const firstNumber = +split[0+i];
+            const operator = split[1+i];
+            const secondNumber = +split[2+i];
+            if (i === 0) answer = firstNumber;
+            answer = operate(answer, operator, secondNumber);
+        }
+        return answerDisplay.textContent = answer;
+    }
+    return answerDisplay.textContent;
 }
 
 function pressNumberBtn() {
     const numberBtn = document.querySelectorAll(".numberBtn");
     numberBtn.forEach(number => {
-        number.addEventListener("click", function() {
+        number.addEventListener("click", () => {
             const split = answerDisplay.textContent.split(" ");
             const firstNumber = split[0];
             const mathOperator = split[1];
@@ -61,38 +64,19 @@ function pressNumberBtn() {
 function pressMathOperatorBtn() {
     const mathOperatorBtn = document.querySelectorAll(".mathOperatorBtn");
     mathOperatorBtn.forEach(btn => {
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", () => {
             const mathOperator = " " + btn.textContent + " ";
-            const regexMathOperator = / [\+\-x÷] /g;
-            const regexMathOperatorLastLetter = / [\+\-x÷] $/g;
-            if (!regexMathOperator.test(answerDisplay.textContent) && answerDisplay.textContent) {
+            if (!/ [\+\-x÷] /g.test(answerDisplay.textContent) && answerDisplay.textContent) {
                 answerDisplay.textContent += mathOperator;
-            } else if (regexMathOperatorLastLetter.test(answerDisplay.textContent)) {
+            } else if (/ [\+\-x÷] $/g.test(answerDisplay.textContent)) {
                 answerDisplay.textContent.replace(" + ", mathOperator);
-                answerDisplay.textContent = answerDisplay.textContent.replace(regexMathOperator, mathOperator);
+                answerDisplay.textContent = answerDisplay.textContent.replace(/ [\+\-x÷] /g, mathOperator);
             }  else if (/ [\+\-x÷] /g.test(answerDisplay.textContent)) {
                 calculateSolution();
                 answerDisplay.textContent += mathOperator;
             }
         });
     });
-}
-
-function calculateSolution() {
-    let split = answerDisplay.textContent.split(" ").filter(e => e);  
-    let answer;
-    if (split.length > 2) {
-        let iteration = split.length - 2;
-        for (let i = 0; i < iteration; i += 2) {
-            const firstNumber = +split[0+i];
-            const operator = split[1+i];
-            const secondNumber = +split[2+i];
-            if (i === 0) answer = firstNumber;
-            answer = operate(answer, operator, secondNumber);
-        }
-        return answerDisplay.textContent = answer;
-    }
-    return answerDisplay.textContent;
 }
 
 function pressEqualBtn() {
@@ -109,7 +93,7 @@ function pressClearBtn() {
 
 function pressDeleteBtn() {
     const del = document.getElementById("del");
-    del.addEventListener("click", function() {
+    del.addEventListener("click", () => {
         if (answerDisplay.textContent[answerDisplay.textContent.length - 1] === " ") {
             answerDisplay.textContent = answerDisplay.textContent.slice(0, -3);
         } else {
@@ -121,7 +105,6 @@ function pressDeleteBtn() {
 function pressDotBtn() {
     const dot = document.getElementById("dot");
     dot.addEventListener("click", () => {
-        const hasDot = /\./g;
         const split = answerDisplay.textContent.split(" ").filter(e => e);  
         const firstNumber = split[0];
         const secondNumber = split[2];
