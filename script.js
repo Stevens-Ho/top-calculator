@@ -31,10 +31,28 @@ function pressNumberBtn() {
     const numberBtn = document.querySelectorAll(".numberBtn");
     numberBtn.forEach(number => {
         number.addEventListener("click", function() {
-            let lastLetter = answerDisplay.textContent[answerDisplay.textContent.length - 1];
-            if (number.textContent !== "0" || 
-            (number.textContent === "0" && answerDisplay.textContent && lastLetter !== " ")) {
-                answerDisplay.textContent += number.textContent;
+            const split = answerDisplay.textContent.split(" ");
+            const firstNumber = split[0];
+            const mathOperator = split[1];
+            const secondNumber = split[2];
+             if (number.textContent === "0") {
+                if ((firstNumber === "") || (secondNumber === "") || 
+                // number start with 0, e.g. 0.123
+                // only can have one 0, can`t accept 00.123
+                (/(0\.)|([1-9]+\.*)/g.test(firstNumber) && !/[\+\-x÷]/g.test(mathOperator)) ||
+                (/(0\.)|([1-9]+\.*)/g.test(secondNumber))
+                // number after decimal can accept 0 more than one, e.g. 0.00123000
+                // number before decimal and the number not start from 0 can accept 0 more than one, e.g. 99009
+                ) {
+                    answerDisplay.textContent += number.textContent;
+                } 
+            } else if (number.textContent !== "0"){
+                //when click number after 0 without a decimal, the number will replace 0
+                if (/^0$/g.test(firstNumber) || /^0$/g.test(secondNumber)) {
+                    answerDisplay.textContent = answerDisplay.textContent.replace(/0$/g, number.textContent);
+                } else {
+                    answerDisplay.textContent += number.textContent;
+                }
             }
         });
     });
