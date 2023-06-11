@@ -107,8 +107,9 @@ function pressDotBtn() {
     dot.addEventListener("click", () => {
         const split = answerDisplay.textContent.split(" ").filter(e => e);  
         const firstNumber = split[0];
+        const operator = split[1];
         const secondNumber = split[2];
-        if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber)) ||
+        if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber) && !operator) ||
         (!/\./.test(secondNumber) && /\d+/.test(secondNumber))) {
             answerDisplay.textContent += dot.textContent;
         }
