@@ -13,6 +13,55 @@ function operate(firstNumber, operator, secondNumber) {
     }
 }
 
+function pressNumberBtn() {
+    const numberBtn = document.querySelectorAll(".numberBtn");
+    numberBtn.forEach(number => {
+        window.addEventListener("keypress", keyboard => {
+            if (number.textContent === keyboard.key) addEventListenerNumberBtn(number);
+        });
+        number.addEventListener("click", () => addEventListenerNumberBtn(number));
+        
+    });
+}
+
+function addEventListenerNumberBtn(number) {
+    const split = answerDisplay.textContent.split(" ");
+    const firstNumber = split[0];
+    const mathOperator = split[1];
+    const secondNumber = split[2];
+     if (number.textContent === "0") {
+        if ((firstNumber === "") || (secondNumber === "") || 
+        // number start with 0, e.g. 0.123
+        // only can have one 0, can`t accept 00.123
+        (/(0\.)|([1-9]+\.*)/g.test(firstNumber) && !/[\+\-x÷]/g.test(mathOperator)) ||
+        (/(0\.)|([1-9]+\.*)/g.test(secondNumber))
+        // number after decimal can accept 0 more than one, e.g. 0.00123000
+        // number before decimal and the number not start from 0 can accept 0 more than one, e.g. 99009
+        ) {
+            answerDisplay.textContent += number.textContent;
+        } 
+    } else if (number.textContent !== "0"){
+        //when click number after 0 without a decimal, the number will replace 0
+        if (/^0$/g.test(firstNumber) || /^0$/g.test(secondNumber)) {
+            answerDisplay.textContent = answerDisplay.textContent.replace(/0$/g, number.textContent);
+        } else {
+            answerDisplay.textContent += number.textContent;
+        }
+    }
+}
+
+function pressMathOperatorBtn() {
+    const mathOperatorBtn = document.querySelectorAll(".mathOperatorBtn");
+    mathOperatorBtn.forEach(btn => {
+        btn.addEventListener("click", () => addEventListenerMathOperator(btn));
+        window.addEventListener("keypress",keyboard => {
+            if (keyboard.key === "*" && btn.textContent === "x") addEventListenerMathOperator(btn);
+            else if (keyboard.key === "/" && btn.textContent === "÷") addEventListenerMathOperator(btn);
+            else if (keyboard.key === btn.textContent) addEventListenerMathOperator(btn);
+        });
+    });
+}
+
 function calculateSolution() {
     const split = answerDisplay.textContent.split(" ").filter(e => e);  
     let answer;
@@ -30,58 +79,27 @@ function calculateSolution() {
     return answerDisplay.textContent;
 }
 
-function pressNumberBtn() {
-    const numberBtn = document.querySelectorAll(".numberBtn");
-    numberBtn.forEach(number => {
-        number.addEventListener("click", () => {
-            const split = answerDisplay.textContent.split(" ");
-            const firstNumber = split[0];
-            const mathOperator = split[1];
-            const secondNumber = split[2];
-             if (number.textContent === "0") {
-                if ((firstNumber === "") || (secondNumber === "") || 
-                // number start with 0, e.g. 0.123
-                // only can have one 0, can`t accept 00.123
-                (/(0\.)|([1-9]+\.*)/g.test(firstNumber) && !/[\+\-x÷]/g.test(mathOperator)) ||
-                (/(0\.)|([1-9]+\.*)/g.test(secondNumber))
-                // number after decimal can accept 0 more than one, e.g. 0.00123000
-                // number before decimal and the number not start from 0 can accept 0 more than one, e.g. 99009
-                ) {
-                    answerDisplay.textContent += number.textContent;
-                } 
-            } else if (number.textContent !== "0"){
-                //when click number after 0 without a decimal, the number will replace 0
-                if (/^0$/g.test(firstNumber) || /^0$/g.test(secondNumber)) {
-                    answerDisplay.textContent = answerDisplay.textContent.replace(/0$/g, number.textContent);
-                } else {
-                    answerDisplay.textContent += number.textContent;
-                }
-            }
-        });
-    });
-}
-
-function pressMathOperatorBtn() {
-    const mathOperatorBtn = document.querySelectorAll(".mathOperatorBtn");
-    mathOperatorBtn.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const mathOperator = " " + btn.textContent + " ";
-            if (!/ [\+\-x÷] /g.test(answerDisplay.textContent) && answerDisplay.textContent) {
-                answerDisplay.textContent += mathOperator;
-            } else if (/ [\+\-x÷] $/g.test(answerDisplay.textContent)) {
-                answerDisplay.textContent.replace(" + ", mathOperator);
-                answerDisplay.textContent = answerDisplay.textContent.replace(/ [\+\-x÷] /g, mathOperator);
-            }  else if (/ [\+\-x÷] /g.test(answerDisplay.textContent)) {
-                calculateSolution();
-                answerDisplay.textContent += mathOperator;
-            }
-        });
-    });
+function addEventListenerMathOperator(btn) {
+    const mathOperator = " " + btn.textContent + " ";
+    if (!/ [\+\-x÷] /g.test(answerDisplay.textContent) && answerDisplay.textContent) {
+        answerDisplay.textContent += mathOperator;
+    } else if (/ [\+\-x÷] $/g.test(answerDisplay.textContent)) {
+        answerDisplay.textContent.replace(" + ", mathOperator);
+        answerDisplay.textContent = answerDisplay.textContent.replace(/ [\+\-x÷] /g, mathOperator);
+    }  else if (/ [\+\-x÷] /g.test(answerDisplay.textContent)) {
+        calculateSolution();
+        answerDisplay.textContent += mathOperator;
+    }
 }
 
 function pressEqualBtn() {
     const equalBtn = document.getElementById("equal");
     equalBtn.addEventListener("click", calculateSolution);
+    window.addEventListener("keypress", keyboard => {
+        if (keyboard.key === "=" || keyboard.key === "Enter") {
+            calculateSolution();
+        }
+    });
 }
 
 function pressClearBtn() {
@@ -102,17 +120,22 @@ function pressDeleteBtn() {
     });
 }
 
+function addEventListenerDot() {
+    const split = answerDisplay.textContent.split(" ").filter(e => e);  
+    const firstNumber = split[0];
+    const operator = split[1];
+    const secondNumber = split[2];
+    if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber) && !operator) ||
+    (!/\./.test(secondNumber) && /\d+/.test(secondNumber))) {
+        return answerDisplay.textContent += dot.textContent;
+    }
+}
+
 function pressDotBtn() {
     const dot = document.getElementById("dot");
-    dot.addEventListener("click", () => {
-        const split = answerDisplay.textContent.split(" ").filter(e => e);  
-        const firstNumber = split[0];
-        const operator = split[1];
-        const secondNumber = split[2];
-        if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber) && !operator) ||
-        (!/\./.test(secondNumber) && /\d+/.test(secondNumber))) {
-            answerDisplay.textContent += dot.textContent;
-        }
+    dot.addEventListener("click", addEventListenerDot);
+    window.addEventListener("keypress", keyboard => {
+        if (keyboard.key === ".") addEventListenerDot();
     });
 }
 
