@@ -5,7 +5,7 @@ function operate() {
     const firstNumber = +split[0];
     const operator = split[1];
     const secondNumber = +split[2];
-    if (secondNumber) {
+    if (!isNaN(secondNumber)) {
         switch (operator) {
             case "+":
                 answerDisplay.textContent = firstNumber + secondNumber;
@@ -51,7 +51,7 @@ function addEventListenerNumberBtn(number) {
         } 
     } else if (number.textContent !== "0"){
         //when click number after 0 without a decimal, the number will replace 0
-        if (/^0$/g.test(firstNumber) || /^0$/g.test(secondNumber)) {
+        if ((/^0$/g.test(firstNumber) && !mathOperator) || /^0$/g.test(secondNumber)) {
             answerDisplay.textContent = answerDisplay.textContent.replace(/0$/g, number.textContent);
         } else {
             answerDisplay.textContent += number.textContent;
