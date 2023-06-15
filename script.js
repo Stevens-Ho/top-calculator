@@ -1,4 +1,10 @@
 const answerDisplay = document.querySelector(".answerDisplay");
+const maxWordDisplay = 16;
+
+function roundOff(number) {
+    const maxDecimal = 4;
+    return (Math.round(number * (10 ** maxDecimal))) / (10 ** maxDecimal);
+}
 
 function operate() {
     const split = answerDisplay.textContent.split(" ").filter(e => e);
@@ -8,16 +14,16 @@ function operate() {
     if (!isNaN(secondNumber)) {
         switch (operator) {
             case "+":
-                answerDisplay.textContent = firstNumber + secondNumber;
+                answerDisplay.textContent = roundOff(firstNumber + secondNumber);
                 break;
             case "-":
-                answerDisplay.textContent = firstNumber - secondNumber;
+                answerDisplay.textContent = roundOff(firstNumber - secondNumber);
                 break;
             case "x":
-                answerDisplay.textContent = firstNumber * secondNumber;
+                answerDisplay.textContent = roundOff(firstNumber * secondNumber);
                 break;
             case "÷":
-                answerDisplay.textContent = firstNumber / secondNumber;
+                answerDisplay.textContent = roundOff(firstNumber / secondNumber);
                 break;
         }
     }
@@ -38,7 +44,10 @@ function addEventListenerNumberBtn(number) {
     const firstNumber = split[0];
     const mathOperator = split[1];
     const secondNumber = split[2];
-     if (number.textContent === "0") {
+    if (answerDisplay.textContent.length === maxWordDisplay) {
+        return;
+    }
+    if (number.textContent === "0") {
         if ((firstNumber === "") || (secondNumber === "") || 
         // number start with 0, e.g. 0.123
         // only can have one 0, can`t accept 00.123
@@ -114,6 +123,9 @@ function addEventListenerDot() {
     const firstNumber = split[0];
     const operator = split[1];
     const secondNumber = split[2];
+    if (answerDisplay.textContent.length === maxWordDisplay) {
+        return;
+    }
     if ((!/\./.test(firstNumber) && /\d+/.test(firstNumber) && !operator) ||
     (!/\./.test(secondNumber) && /\d+/.test(secondNumber))) {
         answerDisplay.textContent += dot.textContent;
