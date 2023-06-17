@@ -5,11 +5,12 @@
 
 body {
     background-color: lightblue;
+    margin: 0;
 }
 
 .bigContainer {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 380px;
@@ -64,4 +65,21 @@ body {
     background-color: lightgreen;
     transform: translate(3%, 3%);
     box-shadow: 2px 2px grey;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+footer p {
+    font-size: medium;
+    margin: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
